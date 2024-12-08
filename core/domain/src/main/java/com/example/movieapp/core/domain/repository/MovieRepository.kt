@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     // Remote operations
-    fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>>
+    suspend fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>>
 
-    fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>>
+    suspend fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>>
 
-    fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>>
+    suspend fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>>
 
-    fun getGenres(): Flow<Resource<List<Genre>>>
+    suspend fun getGenres(): Flow<Resource<List<Genre>>>
 
-    fun getSimilarMovies(movieId: Int, page: Int): Flow<Resource<List<Movie>>>
+    suspend fun getSimilarMovies(movieId: Int, page: Int): Flow<Resource<List<Movie>>>
 
     // Local operations
     fun getFavoriteMovies(): Flow<List<Movie>>

@@ -5,9 +5,9 @@ import com.example.movieapp.core.common.base.Resource
 import com.example.movieapp.core.data.local.dao.FavoriteMovieDao
 import com.example.movieapp.core.data.local.dao.GenreDao
 import com.example.movieapp.core.data.local.dao.MovieGenreDao
+import com.example.movieapp.core.data.local.entity.GenreEntity
 import com.example.movieapp.core.data.local.entity.MovieGenreCrossRef
 import com.example.movieapp.core.data.remote.mapper.toDomainModel
-import com.example.movieapp.core.data.remote.mapper.toEntity
 import com.example.movieapp.core.data.remote.mapper.toFavoriteEntity
 import com.example.movieapp.core.data.remote.source.MovieRemoteDataSource
 import com.example.movieapp.core.domain.model.Genre
@@ -25,7 +25,7 @@ class MovieRepositoryImpl @Inject constructor(
     private val movieGenreDao: MovieGenreDao
 ) : MovieRepository {
 
-    override fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>> = 
+    override suspend fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>> =
         remoteDataSource.getPopularMovies(page).map { result ->
             when (result) {
                 is NetworkResult.Success ->
@@ -37,7 +37,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> =
+    override suspend fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> =
         remoteDataSource.getMovieDetail(movieId).map { result ->
             when (result) {
                 is NetworkResult.Success -> 
@@ -49,7 +49,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>> =
+    override suspend fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>> =
         remoteDataSource.searchMovies(query, page).map { result ->
             when (result) {
                 is NetworkResult.Success -> 
@@ -61,7 +61,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun getGenres(): Flow<Resource<List<Genre>>> = 
+    override suspend fun getGenres(): Flow<Resource<List<Genre>>> =
         remoteDataSource.getGenres().map { result ->
             when (result) {
                 is NetworkResult.Success -> 
@@ -73,7 +73,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun getSimilarMovies(movieId: Int, page: Int): Flow<Resource<List<Movie>>> =
+    override suspend fun getSimilarMovies(movieId: Int, page: Int): Flow<Resource<List<Movie>>> =
         remoteDataSource.getSimilarMovies(movieId, page).map { result ->
             when (result) {
                 is NetworkResult.Success -> 
@@ -86,18 +86,18 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
     override fun getFavoriteMovies(): Flow<List<Movie>> =
-        favoriteMovieDao.getAllFavoriteMovies().map { movieWithGenres ->
-            movieWithGenres.map { movieWithGenre ->
+        favoriteMovieDao.getAllFavoriteMovies().map { favoriteMovie ->
+            favoriteMovie.map { entity ->
                 Movie(
-                    id = movieWithGenre.movie.movieId,
-                    title = movieWithGenre.movie.title,
-                    overview = movieWithGenre.movie.overview,
-                    posterPath = movieWithGenre.movie.posterPath,
-                    backdropPath = movieWithGenre.movie.backdropPath,
-                    releaseDate = movieWithGenre.movie.releaseDate,
-                    genreIds = movieWithGenre.genres.map { it.genreId },
-                    voteAverage = movieWithGenre.movie.voteAverage,
-                    voteCount = movieWithGenre.movie.voteCount
+                    id = entity.movieId,
+                    title = entity.title,
+                    overview = entity.overview,
+                    posterPath = entity.posterPath,
+                    backdropPath = entity.backdropPath,
+                    releaseDate = entity.releaseDate,
+                    genreIds = emptyList(),
+                    voteAverage = entity.voteAverage,
+                    voteCount = entity.voteCount
                 )
             }
         }
@@ -106,11 +106,11 @@ class MovieRepositoryImpl @Inject constructor(
         favoriteMovieDao.insertFavoriteMovie(movieDetail.toFavoriteEntity())
         
         movieDetail.genres.forEach { genre ->
-            genreDao.insertGenre(genre.toEntity())
             movieGenreDao.insertMovieGenreCrossRef(
                 MovieGenreCrossRef(movieDetail.id, genre.id)
             )
         }
+        genreDao.insertGenres(movieDetail.genres.map { GenreEntity(it.id, it.name) })
     }
 
     override suspend fun removeMovieFromFavorites(movieId: Int) {

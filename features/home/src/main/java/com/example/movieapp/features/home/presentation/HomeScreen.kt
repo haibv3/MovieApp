@@ -1,6 +1,9 @@
 package com.example.movieapp.features.home.presentation
 
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.movieapp.core.ui.base.BaseScreen
