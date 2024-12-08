@@ -86,8 +86,8 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
     override fun getFavoriteMovies(): Flow<List<Movie>> =
-        favoriteMovieDao.getAllFavoriteMovies().map { favoritesmMovie ->
-            favoritesmMovie.map { entity ->
+        favoriteMovieDao.getAllFavoriteMovies().map { favoriteMovie ->
+            favoriteMovie.map { entity ->
                 Movie(
                     id = entity.movieId,
                     title = entity.title,
