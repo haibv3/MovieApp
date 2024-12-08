@@ -17,3 +17,16 @@ A modern Android movie app built with the latest Android development tools and b
 - **Network**: Retrofit
 - **Async**: Kotlin Coroutines + Flow
 - **Image Loading**: Coil
+
+## Project Structure
+- **app**: Main application module
+- **core**:
+  - common: Common utilities and base classes
+  - data: Data layer implementation
+  - domain: Domain layer with business logic
+  - ui: Common UI components
+- **features**:
+  - details: Movie details feature
+  - favorites: Favorite movies feature
+  - home: Home screen feature
+  - search: Movie search feature
