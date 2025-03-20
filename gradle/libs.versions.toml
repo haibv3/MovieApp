@@ -2,19 +2,19 @@
 
 [versions]
 # Gradle & Kotlin
-agp = "8.7.2"
+agp = "8.8.2"
 kotlin = "1.9.21"
 ksp = "1.9.21-1.0.15"
 
 # Core & Lifecycle
 core-ktx = "1.15.0"
 lifecycle = "2.8.7"
-activity-compose = "1.9.3"
+activity-compose = "1.10.1"
 
 # Compose
-compose-bom = "2024.11.00"
+compose-bom = "2025.03.00"
 compose-compiler = "1.5.7"
-navigation-compose = "2.8.4"
+navigation-compose = "2.8.9"
 
 # Dependency Injection
 hilt = "2.50"

@@ -30,9 +30,9 @@ class MovieRepositoryImpl @Inject constructor(
             when (result) {
                 is NetworkResult.Success ->
                     Resource.Success(result.data.results.map { it.toDomainModel() })
-                is NetworkResult.Error -> 
+                is NetworkResult.Error ->
                     Resource.Error(result.message)
-                NetworkResult.Loading -> 
+                NetworkResult.Loading ->
                     Resource.Loading
             }
         }
@@ -40,11 +40,11 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> =
         remoteDataSource.getMovieDetail(movieId).map { result ->
             when (result) {
-                is NetworkResult.Success -> 
+                is NetworkResult.Success ->
                     Resource.Success(result.data.toDomainModel())
-                is NetworkResult.Error -> 
+                is NetworkResult.Error ->
                     Resource.Error(result.message)
-                NetworkResult.Loading -> 
+                NetworkResult.Loading ->
                     Resource.Loading
             }
         }
@@ -52,11 +52,11 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>> =
         remoteDataSource.searchMovies(query, page).map { result ->
             when (result) {
-                is NetworkResult.Success -> 
+                is NetworkResult.Success ->
                     Resource.Success(result.data.results.map { it.toDomainModel() })
-                is NetworkResult.Error -> 
+                is NetworkResult.Error ->
                     Resource.Error(result.message)
-                NetworkResult.Loading -> 
+                NetworkResult.Loading ->
                     Resource.Loading
             }
         }
@@ -64,11 +64,11 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getGenres(): Flow<Resource<List<Genre>>> =
         remoteDataSource.getGenres().map { result ->
             when (result) {
-                is NetworkResult.Success -> 
+                is NetworkResult.Success ->
                     Resource.Success(result.data.genres.map { it.toDomainModel() })
-                is NetworkResult.Error -> 
+                is NetworkResult.Error ->
                     Resource.Error(result.message)
-                NetworkResult.Loading -> 
+                NetworkResult.Loading ->
                     Resource.Loading
             }
         }
@@ -76,11 +76,11 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getSimilarMovies(movieId: Int, page: Int): Flow<Resource<List<Movie>>> =
         remoteDataSource.getSimilarMovies(movieId, page).map { result ->
             when (result) {
-                is NetworkResult.Success -> 
+                is NetworkResult.Success ->
                     Resource.Success(result.data.results.map { it.toDomainModel() })
-                is NetworkResult.Error -> 
+                is NetworkResult.Error ->
                     Resource.Error(result.message)
-                NetworkResult.Loading -> 
+                NetworkResult.Loading ->
                     Resource.Loading
             }
         }
@@ -104,7 +104,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun addMovieToFavorites(movieDetail: MovieDetail) {
         favoriteMovieDao.insertFavoriteMovie(movieDetail.toFavoriteEntity())
-        
+
         movieDetail.genres.forEach { genre ->
             movieGenreDao.insertMovieGenreCrossRef(
                 MovieGenreCrossRef(movieDetail.id, genre.id)

@@ -4,7 +4,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun String.toDate(pattern: String = "yyyy-MM-dd"): Date? {
+const val API_DATE_FORMAT = "yyyy-MM-dd"
+const val DISPLAY_DATE_FORMAT = "dd MMM yyyy"
+
+fun String.toDate(pattern: String = API_DATE_FORMAT): Date? {
     return try {
         SimpleDateFormat(pattern, Locale.getDefault()).parse(this)
     } catch (e: Exception) {
@@ -12,6 +15,6 @@ fun String.toDate(pattern: String = "yyyy-MM-dd"): Date? {
     }
 }
 
-fun Date.format(pattern: String = "dd MMM yyyy"): String {
+fun Date.format(pattern: String = DISPLAY_DATE_FORMAT): String {
     return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }

@@ -1,10 +1,13 @@
 package com.example.movieapp.core.common.utils
 
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+
 object ErrorUtils {
     fun getErrorMessage(throwable: Throwable): String {
         return when (throwable) {
-            is java.net.UnknownHostException -> "No internet connection"
-            is java.net.SocketTimeoutException -> "Connection timeout"
+            is UnknownHostException -> "No internet connection"
+            is SocketTimeoutException -> "Connection timeout"
             is retrofit2.HttpException -> getHttpErrorMessage(throwable.code())
             else -> throwable.message ?: "Unknown error occurred"
         }
